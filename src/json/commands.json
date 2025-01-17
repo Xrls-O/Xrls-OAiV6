@@ -1,0 +1,12 @@
+[
+    {
+        "commandName": "registerApp",
+        "description": "Registra una nueva aplicación.",
+        "category": "admin"
+    },
+    {
+        "commandName": "viewApplications",
+        "description": "Muestra las aplicaciones registradas.",
+        "category": "admin"
+    }
+]
