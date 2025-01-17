@@ -1,0 +1,9 @@
+[
+    {
+        "appId": "app1",
+        "name": "CryptoTracker",
+        "description": "Aplicación para rastrear precios de criptomonedas",
+        "ownerId": "123456789012345678",
+        "registeredAt": "2025-01-01T12:00:00Z"
+    }
+]
