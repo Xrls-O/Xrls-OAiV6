@@ -1,0 +1,12 @@
+[
+    {
+        "icoId": "ico1",
+        "name": "HamsterKombat",
+        "tokenSymbol": "HMB",
+        "totalSupply": 1000000,
+        "pricePerToken": 0.01,
+        "creatorId": "123456789012345678",
+        "createdAt": "2025-01-05T10:00:00Z",
+        "status": "active"
+    }
+]
