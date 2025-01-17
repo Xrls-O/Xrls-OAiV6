@@ -1,5 +1,6 @@
 # My Discord Bot
 
+ ACTUALIZAR: index, package, validateDependencies y validateEnvironment.js
 Este proyecto consiste en un bot de Discord completamente funcional con múltiples comandos, integración con tecnologías Web3, generación de imágenes y videos mediante IA, y mucho más. Se conecta a APIs externas, permite la creación y gestión de ICOs, y proporciona funcionalidades de entretenimiento, administración y utilidades.
 
 ## Tabla de Contenidos
