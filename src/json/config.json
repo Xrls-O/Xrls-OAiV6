@@ -1,0 +1,6 @@
+{
+    "prefix": "/",
+    "ownerId": "YOUR_OWNER_ID",
+    "token": "YOUR_BOT_TOKEN",
+    "logChannel": "log-channel-id"
+}
