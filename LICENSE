@@ -39,13 +39,14 @@ For more information, please refer to <https://unlicense.org>
 
 Si deseas representar al bot, considera usar algo como esto en el README, un gráfico o un logo creado por ti o con herramientas:
 
-```plaintext  
+```plaintext 
+
   \ \
  __\ \
-/  __  \    \               BOT NAME
+/  __  \    \.               - BOT NAME
 \/ / </\> -\  \ 
 ` |     <>    )  \ 
- ( \___/   __ \             Discord Bot powered by AI & Web3
+ ( \___/   __ \.             - Discord Bot powered by AI & Web3
   \/</\> \  \_/
            \_/
 ```             
