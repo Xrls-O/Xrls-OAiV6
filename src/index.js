@@ -292,3 +292,115 @@ const startBot = async () => {
 };
 
 startBot();
+
+const { exec } = require('child_process');
+const fs = require('fs');
+const path = require('path');
+
+// Contador de intentos
+let attempts = 0;
+const MAX_ATTEMPTS = 5;
+
+// Estado de requerimientos aprobados
+let requirementsApproved = false;
+
+// Función para verificar y arreglar dependencias
+const checkAndInstallDependencies = () => {
+    return new Promise((resolve, reject) => {
+        const requiredDependencies = ['axios', 'discord.js', '@google-cloud/text-to-speech', 'util'];
+        let missingDependencies = [];
+
+        requiredDependencies.forEach(dep => {
+            try {
+                require.resolve(dep);
+            } catch (e) {
+                missingDependencies.push(dep);
+            }
+        });
+
+        if (missingDependencies.length > 0) {
+            console.log(`Faltan dependencias: ${missingDependencies.join(', ')}`);
+            console.log('Instalando dependencias faltantes...');
+
+            // Ejecutar npm install para instalar las dependencias faltantes
+            exec(`npm install ${missingDependencies.join(' ')}`, (error, stdout, stderr) => {
+                if (error) {
+                    console.error(`Error al instalar dependencias: ${stderr}`);
+                    reject(error);
+                } else {
+                    console.log(`Dependencias instaladas: ${stdout}`);
+                    resolve();
+                }
+            });
+        } else {
+            console.log('Todas las dependencias están instaladas.');
+            resolve();
+        }
+    });
+};
+
+// Función para verificar si la configuración y el entorno son correctos
+const validateEnvironment = () => {
+    if (!process.env.GOOGLE_APPLICATION_CREDENTIALS) {
+        console.error('ERROR: La variable de entorno GOOGLE_APPLICATION_CREDENTIALS no está configurada.');
+        console.error('Por favor, configura la clave de servicio de Google Cloud en el archivo .env.');
+        process.exit(1);
+    }
+
+    // Verificar si la carpeta de audios existe
+    const audioDir = path.join(__dirname, 'audio');
+    if (!fs.existsSync(audioDir)) {
+        console.log('Creando la carpeta de audios...');
+        fs.mkdirSync(audioDir);
+    }
+};
+
+// Función para mostrar instrucciones de solución de errores
+const showErrorSolution = () => {
+    console.log(`
+        --- ERROR CRÍTICO ---
+        El bot no pudo completar los intentos para verificar los requisitos esenciales.
+
+        Pasos para solucionar el problema:
+        1. Verifica que la variable de entorno GOOGLE_APPLICATION_CREDENTIALS esté configurada correctamente en el archivo .env.
+        2. Asegúrate de que tienes acceso a las credenciales de Google Cloud para el servicio de Text-to-Speech.
+        3. Verifica que las dependencias de npm estén correctamente instaladas ejecutando:
+            npm install axios discord.js @google-cloud/text-to-speech util
+        4. Revisa los permisos en tu sistema o en Replit para asegurarte de que el bot tenga acceso a los archivos necesarios.
+
+        Si el problema persiste, revisa los registros y vuelve a intentar.
+        --- FIN DE INSTRUCCIONES ---
+    `);
+};
+
+// Función para arrancar el bot con intentos limitados
+const startBot = async () => {
+    while (attempts < MAX_ATTEMPTS && !requirementsApproved) {
+        try {
+            console.log(`Intento ${attempts + 1} de ${MAX_ATTEMPTS}`);
+
+            // Verificación de dependencias y entorno
+            await checkAndInstallDependencies();
+            validateEnvironment();
+
+            // Si todo es correcto, marcamos los requisitos como aprobados
+            requirementsApproved = true;
+            console.log('Requisitos aprobados, el bot puede arrancar.');
+            
+            // Aquí puedes agregar el código para iniciar el bot, como el login de Discord, por ejemplo
+            // client.login(process.env.BOT_TOKEN); 
+
+        } catch (error) {
+            attempts++;
+            console.error(`Hubo un error en el intento ${attempts}:`, error.message);
+
+            if (attempts >= MAX_ATTEMPTS) {
+                showErrorSolution();
+                process.exit(1);
+            }
+        }
+    }
+};
+
+// Arrancar el bot
+startBot();
