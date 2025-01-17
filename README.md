@@ -39,5 +39,6 @@ Asegúrate de tener los siguientes requisitos para ejecutar este bot correctamen
    git clone https://github.com/tu-usuario/my-discord-bot.git
    cd my-discord-bot
 
-## Resultado:
-![SCreenshot](https://media.discordapp.net/attachments/989739808286974002/1329878655085842482/vorg_ok_94948_mental_arithmetic_aa90f5b2-12f3-429b-bf58-a19efcaa944d.png?ex=678bf183&is=678aa003&hm=8cc8d0f18a2d56fc12a048ffc1bafc40318a0ea080abf94aaae3718b42f23022&) 
+<img src="https://media.discordapp.net/attachments/989739808286974002/1329878655085842482/vorg_ok_94948_mental_arithmetic_aa90f5b2-12f3-429b-bf58-a19efcaa944d.png?ex=678bf183&is=678aa003&hm=8cc8d0f18a2d56fc12a048ffc1bafc40318a0ea080abf94aaae3718b42f23022&">
+
+
