@@ -222,3 +222,73 @@ client.once('ready', () => {
 });
 
 client.login(process.env.TOKEN);
+const { exec } = require('child_process');
+const fs = require('fs');
+const path = require('path');
+
+// Función para verificar y arreglar dependencias
+const checkAndInstallDependencies = () => {
+    return new Promise((resolve, reject) => {
+        const requiredDependencies = ['axios', 'discord.js', '@google-cloud/text-to-speech', 'util'];
+        let missingDependencies = [];
+
+        requiredDependencies.forEach(dep => {
+            try {
+                require.resolve(dep);
+            } catch (e) {
+                missingDependencies.push(dep);
+            }
+        });
+
+        if (missingDependencies.length > 0) {
+            console.log(`Faltan dependencias: ${missingDependencies.join(', ')}`);
+            console.log('Instalando dependencias faltantes...');
+
+            // Ejecutar npm install para instalar las dependencias faltantes
+            exec(`npm install ${missingDependencies.join(' ')}`, (error, stdout, stderr) => {
+                if (error) {
+                    console.error(`Error al instalar dependencias: ${stderr}`);
+                    reject(error);
+                } else {
+                    console.log(`Dependencias instaladas: ${stdout}`);
+                    resolve();
+                }
+            });
+        } else {
+            console.log('Todas las dependencias están instaladas.');
+            resolve();
+        }
+    });
+};
+
+// Función para verificar si la configuración y el entorno son correctos
+const validateEnvironment = () => {
+    if (!process.env.GOOGLE_APPLICATION_CREDENTIALS) {
+        console.error('ERROR: La variable de entorno GOOGLE_APPLICATION_CREDENTIALS no está configurada.');
+        console.error('Por favor, configura la clave de servicio de Google Cloud en el archivo .env.');
+        process.exit(1);
+    }
+
+    // Verificar si la carpeta de audios existe
+    const audioDir = path.join(__dirname, 'audio');
+    if (!fs.existsSync(audioDir)) {
+        console.log('Creando la carpeta de audios...');
+        fs.mkdirSync(audioDir);
+    }
+};
+
+// Función para arrancar el bot
+const startBot = async () => {
+    try {
+        await checkAndInstallDependencies();
+        validateEnvironment();
+        
+        // Aquí inicias el bot (por ejemplo, con client.login() si estás usando Discord.js)
+        console.log('El bot está listo para arrancar!');
+    } catch (error) {
+        console.error('Hubo un error al arrancar el bot:', error.message);
+        process.exit(1);
+    }
+};
+
+startBot();
