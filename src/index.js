@@ -1,47 +1,85 @@
-const { Client, GatewayIntentBits } = require('discord.js');
+const { Client, Intents, Collection } = require('discord.js');
+const { REST } = require('@discordjs/rest');
+const { Routes } = require('discord-api-types/v9');
 const fs = require('fs');
-require('dotenv').config();
+const path = require('path');
+const botConfig = require('./src/config/botConfig.js');
+const { Player } = require('discord-player');
 
-const config = {
-  token: process.env.DISCORD_TOKEN,
-  prefix: "!",  // O el prefijo que prefieras
-  botName: "MyBot"
-};
-
-// Crea el cliente de Discord
+// Crear el cliente de Discord
 const client = new Client({
-    intents: [
-        GatewayIntentBits.Guilds,
-        GatewayIntentBits.GuildMessages,
-        GatewayIntentBits.MessageContent
-    ]
+  intents: [
+    Intents.FLAGS.GUILDS,
+    Intents.FLAGS.GUILD_MESSAGES,
+    Intents.FLAGS.GUILD_VOICE_STATES,
+    Intents.FLAGS.GUILD_MEMBERS,
+  ],
 });
 
-// Comandos: Carga todos los comandos de la carpeta 'commands'
+client.commands = new Collection();
 const commands = [];
-fs.readdirSync('./commands').forEach(dir => {
-    const commandFiles = fs.readdirSync(`./commands/${dir}`).filter(file => file.endsWith('.js'));
-    commandFiles.forEach(file => {
-        const command = require(`./commands/${dir}/${file}`);
-        commands.push(command);
-    });
+
+// Leer los comandos desde la carpeta commands
+const commandsPath = path.join(__dirname, 'src/commands');
+const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
+
+for (const file of commandFiles) {
+  const command = require(`./src/commands/${file}`);
+  client.commands.set(command.name, command);
+  commands.push({
+    name: command.name,
+    description: command.description,
+    options: command.options || [],
+  });
+}
+
+// Registrar comandos con la API de Discord
+const rest = new REST({ version: '9' }).setToken(botConfig.token);
+
+(async () => {
+  try {
+    console.log('⏳ Actualizando comandos de aplicación...');
+    await rest.put(
+      Routes.applicationGuildCommands(botConfig.clientId, botConfig.guildId),
+      { body: commands }
+    );
+    console.log('✅ Comandos registrados exitosamente.');
+  } catch (error) {
+    console.error('❌ Error al registrar comandos:', error);
+  }
+})();
+
+// Inicializar el reproductor de música
+client.player = new Player(client);
+
+client.player.on('trackStart', (queue, track) =>
+  queue.metadata.channel.send(`🎶 | Reproduciendo ahora: **${track.title}**`)
+);
+
+client.player.on('trackAdd', (queue, track) =>
+  queue.metadata.channel.send(`✅ | Añadido a la cola: **${track.title}**`)
+);
+
+client.player.on('error', (queue, error) => {
+  console.error(`❌ Error en la cola: ${error.message}`);
 });
 
-// Inicializa el bot cuando esté listo
+// Manejar eventos
+const eventsPath = path.join(__dirname, 'src/events');
+const eventFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith('.js'));
+
+for (const file of eventFiles) {
+  const event = require(`./src/events/${file}`);
+  if (event.once) {
+    client.once(event.name, (...args) => event.execute(...args));
+  } else {
+    client.on(event.name, (...args) => event.execute(...args));
+  }
+}
+
+// Logear el cliente
 client.once('ready', () => {
-    console.log(`${config.botName} está en línea y funcionando.`);
+  console.log(`✅ Bot iniciado como ${client.user.tag}`);
 });
 
-// Manejo de eventos de mensajes
-client.on('messageCreate', message => {
-    if (message.content.startsWith(config.prefix)) {
-        const args = message.content.slice(config.prefix.length).trim().split(/ +/);
-        const command = args.shift().toLowerCase();
-
-        const cmd = commands.find(c => c.name === command);
-        if (cmd) cmd.execute(message, args);
-    }
-});
-
-// Inicia sesión con el token del bot
-client.login(config.token);
+client.login(botConfig.token);
