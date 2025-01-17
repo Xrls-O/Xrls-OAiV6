@@ -1,0 +1,10 @@
+{
+    "admin": {
+        "canRegisterApp": true,
+        "canViewApplications": true
+    },
+    "user": {
+        "canRegisterApp": false,
+        "canViewApplications": true
+    }
+}
