@@ -1,0 +1,16 @@
+{
+  "name": "discord-bot",
+  "version": "1.0.0",
+  "description": "Bot para Discord con funcionalidades de ICO y Web3",
+  "main": "index.js",
+  "dependencies": {
+    "discord.js": "^14.3.0",
+    "axios": "^0.26.1",
+    "dotenv": "^10.0.0"
+  },
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "",
+  "license": "ISC"
+}
