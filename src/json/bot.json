@@ -1,0 +1,9 @@
+{
+    "botName": "MyBot",
+    "version": "1.0.0",
+    "ownerId": "YOUR_OWNER_ID",
+    "supportServer": "https://discord.gg/your-support-server",
+    "prefix": "/",
+    "token": "YOUR_BOT_TOKEN",
+    "clientId": "YOUR_CLIENT_ID"
+}
