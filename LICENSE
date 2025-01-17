@@ -22,3 +22,27 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 OTHER DEALINGS IN THE SOFTWARE.
 
 For more information, please refer to <https://unlicense.org>
+
+### **Recomendaciones adicionales**:
+1. **Imágenes o ilustraciones**:
+   Podrías agregar una imagen o logo del bot para hacer más atractiva la presentación del README. Puedes crear un gráfico que represente el propósito del bot (por ejemplo, un robot de Discord) usando herramientas como **Canva**, **Figma** o incluso generadores de imágenes con IA.
+
+2. **Errores comunes**:
+   - Documenta los errores más comunes que los usuarios pueden encontrar al usar el bot (como problemas de permisos, configuración incorrecta del token, etc.) para que los usuarios puedan solucionarlos rápidamente.
+
+3. **Siguientes pasos**:
+   Si el bot es parte de un proyecto más grande, puedes agregar una sección que hable de cómo extender el bot o integrarlo con otros servicios.
+
+---
+
+### **Imagen Representativa del Bot (opcional)**
+
+Si deseas representar al bot, considera usar algo como esto en el README, un gráfico o un logo creado por ti o con herramientas:
+
+```plaintext
+   __
+  [  ]
+  |  |     BOT NAME
+  |__|
+ (  )
+ (  )   Discord Bot powered by AI & Web3
